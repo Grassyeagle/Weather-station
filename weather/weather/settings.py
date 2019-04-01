@@ -25,7 +25,7 @@ SECRET_KEY = 'i7r@3h-gfrfhle0xw570rm8omum8vd&x#1gzg%6ym()ub$*yl1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.codenvy.io', '.vfs.cloud9.us-east-1.amazonaws.com']
+ALLOWED_HOSTS = ['.codenvy.io', '.vfs.cloud9.us-east-1.amazonaws.com', 'crutchfield.shelms.io']
 
 
 # Application definition
