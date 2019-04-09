@@ -10,4 +10,3 @@ class TemperatureList(generics.ListCreateAPIView):
 class TemperatureDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Temperature.objects.all()
     serializer_class = TemperatureSerializer
-
