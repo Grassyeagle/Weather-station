@@ -26,18 +26,17 @@ position: relative;
             <h1>Temperature</h1>
             <h1>{{ temp.fahrenheit|floatformat:1 }}</h1>
             <h3>7 day graph</h3>
-            X # of times Temp was measured
+            
             </div>
         <div class="col-md-4 text-centered border text-danger ">
             <h1>Humidity</h1>
-            <h1>    98%</h1>
+            <h1>{{ h.rh |floatformat:1 }}</h1>
             <h3>7-day graph</h3>
-            x # of times humidity was measured
             </div>
         <div class="col-md-4 text-centered border text-succcess text-danger ">
-        <h1>Time</h1>
-        <h1>11:59</h1>
-        <h3>Monday</h3>
+        <h1>Pressure</h1>
+        <h1>{{ p.p |floatformat:1 }}</h1>
+        <h3>7 day graph</h3>
         
         </div>
     </div>

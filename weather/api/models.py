@@ -15,5 +15,17 @@ class Temperature(models.Model):
 
 
 
-class Humidity(models.Model):
-    pass
+class H(models.Model):
+    rh = models.FloatField(default=0.0)
+    change = models.FloatField(default=0.0)
+    record_time = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return str(self.rh)
+pass
+
+class Bp(models.Model):
+    p = models.FloatField(default=0.0)
+    change = models.FloatField(default=0.0)
+    record_time = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return str(self.p)
