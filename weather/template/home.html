@@ -25,18 +25,37 @@ position: relative;
         <div class="col-md-4 text-centered border text-danger ">
             <h1>Temperature</h1>
             <h1>{{ temp.fahrenheit|floatformat:1 }}</h1>
-            <h3>7 day graph</h3>
+            <h3></h3>
             
             </div>
         <div class="col-md-4 text-centered border text-danger ">
             <h1>Humidity</h1>
             <h1>{{ h.rh |floatformat:1 }}</h1>
-            <h3>7-day graph</h3>
+            <h3></h3>
             </div>
         <div class="col-md-4 text-centered border text-succcess text-danger ">
         <h1>Pressure</h1>
         <h1>{{ p.p |floatformat:1 }}</h1>
-        <h3>7 day graph</h3>
+        <h3></h3>
+        
+        </div>
+    </div>
+     <div class="row">
+        <div class="col-md-4 text-centered border text-danger ">
+            <h1>One week Temperature max/min</h1>
+            <h1> {{tmax |floatformat:1 }}/{{tmin |floatformat:1 }}</h1>
+            
+            
+            </div>
+        <div class="col-md-4 text-centered border text-danger ">
+            <h1>One week Humidity   max/min</h1>
+            <h1>{{hmax |floatformat:1 }}/{{hmin| floatformat:1 }} </h1>
+            
+            </div>
+        <div class="col-md-4 text-centered border text-succcess text-danger ">
+            <h1>One week Pressure   max/min </h1>
+            <h1> {{pmax |floatformat:1 }}/{{pmin |floatformat:1 }}</h1>
+        
         
         </div>
     </div>
