@@ -12,7 +12,7 @@ position: relative;
         
 }
     body{
-        background: #191919;
+        background: #0a3572;
     }
     </style>
 </head>
@@ -42,21 +42,88 @@ position: relative;
     </div>
      <div class="row">
         <div class="col-md-4 text-centered border text-danger ">
-            <h1>One week Temperature max/min</h1>
+            <h1>One Day Temperature max/min</h1>
             <h1> {{tmax |floatformat:1 }}/{{tmin |floatformat:1 }}</h1>
             
             
             </div>
         <div class="col-md-4 text-centered border text-danger ">
-            <h1>One week Humidity   max/min</h1>
+            <h1>One Day Humidity   max/min</h1>
             <h1>{{hmax |floatformat:1 }}/{{hmin| floatformat:1 }} </h1>
             
             </div>
         <div class="col-md-4 text-centered border text-succcess text-danger ">
-            <h1>One week Pressure   max/min </h1>
+            <h1>On Day Pressure   max/min </h1>
             <h1> {{pmax |floatformat:1 }}/{{pmin |floatformat:1 }}</h1>
         
         
+        </div>
+    </div>
+     <div id="graphs" class="container graphs">
+        <div class="row"> <!-- this horizontal row will hold our weather display -->
+            <div class="col-md-4"> <!-- block 1 (left) -->
+                <div class="weather-block rounded">
+                    
+        <canvas id="tempChart" width="500" height="400"></canvas>
+
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.0.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+        <script type="text/javascript">
+            $.get('/chart/temp', function(data) {
+                var ctx = $("#tempChart").get(0).getContext("2d");
+                new Chart(ctx, {
+                    type: 'line',
+                    data: data,
+                    options: {
+                        responsive: true
+                    }
+                });
+            });
+        </script>
+                </div>
+            </div>
+            <div class="col-md-4"> <!-- block 2 (middle) -->
+                <div class="weather-block rounded">
+                    
+        <canvas id="rhChart" width="500" height="400"></canvas>
+
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.0.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+        <script type="text/javascript">
+            $.get('/chart/rh', function(data) {
+                var ctx = $("#rhChart").get(0).getContext("2d");
+                new Chart(ctx, {
+                    type: 'line',
+                    data: data,
+                    options: {
+                        responsive: true
+                    }
+                });
+            });
+        </script>
+                </div>
+            </div>
+            <div class="col-md-4"> <!-- block 3 (right) -->
+                <div class="weather-block rounded">
+                    
+        <canvas id="bpChart" width="500" height="400"></canvas>
+
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.0.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+        <script type="text/javascript">
+            $.get('/chart/bp', function(data) {
+                var ctx = $("#bpChart").get(0).getContext("2d");
+                new Chart(ctx, {
+                    type: 'line',
+                    data: data,
+                    options: {
+                        responsive: true
+                    }
+                });
+            });
+        </script>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -1,10 +1,55 @@
 from django.shortcuts import render
 from api.models import Temperature , H , Bp
 from datetime import datetime, timedelta
-from django.db.models import Max, Min
-
+from django.db.models import Max, Min, F
+from chartjs.views.lines import BaseLineChartView
 def c2f(celsius):
     return ((celsius*9/5)+32)
+
+        
+
+days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+class LineChartView(BaseLineChartView):
+    labels =[]
+    max_list = []
+    min_list = []
+    
+    def get_providers(self):
+        return ['Max','Min']
+    
+    def get_labels(self):
+        return self.labels
+    
+    def get_data(self):
+        self.last_seven_days() 
+        return [self.max_list, self.min_list]
+        
+    
+    def set_minmax(self, index, item):
+        if item > self.max_list[index]:
+            self.max_list[index] = item
+        if item < self.min_list[index]:
+            self.min_list[index] = item
+        
+        
+    def last_seven_days(self):
+        now = datetime.now()
+        seven_days_ago = now - timedelta(days=7)
+    
+        datas = Temperature.objects.order_by('record_time').filter(record_time__range=(seven_days_ago, now)).annotate(value=F('celsius'))
+        for data in datas:
+            weekday = datetime.weekday(data.record_time)
+            if days[weekday] not in self.labels:
+                self.labels.append(days[weekday])
+    
+        self.max_list = [-100 for i in range(len(self.labels))]
+        self.min_list = [99999999 for i in range(len(self.labels))]
+        for data in datas:
+             weekday = datetime.weekday(data.record_time)
+             idx = self.labels.index(days[weekday])
+             self.set_minmax(idx, data.value)
+             
+    
 # Create your views here.
 def home(request):
     # Find the newest single temperature
@@ -25,7 +70,7 @@ def home(request):
     # Find the first temperature entry recorded
     Pfirst = Bp.objects.order_by('record_time').first()
     now = datetime.now()
-    some_time_ago = now - timedelta(days=7)
+    some_time_ago = now - timedelta(days=1)
     tmax = c2f(Temperature.objects.filter(record_time__range=(some_time_ago, now)).aggregate(Max('celsius'))['celsius__max'])
     hmax = H.objects.filter(record_time__range=(some_time_ago, now)).aggregate(Max('rh'))['rh__max']
     pmax = Bp.objects.filter(record_time__range=(some_time_ago, now)).aggregate(Max('p'))['p__max']
