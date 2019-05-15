@@ -10,10 +10,34 @@ def c2f(celsius):
 
 days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 class LineChartView(BaseLineChartView):
+    type = ' '
     labels =[]
     max_list = []
     min_list = []
+  
+    def last_seven_days(self):
+        self.type = self.kwargs.get('type')
+        now = datetime.now()
+        seven_days_ago = now - timedelta(days=7)
     
+        if self.type == 'rh':
+            datas = H.objects.order_by('record_time').filter(record_time__range=(seven_days_ago, now)).annotate(value=F('rh'))
+        elif self.type == 'p':
+            datas = Bp.objects.order_by('record_time').filter(record_time__range=(seven_days_ago, now)).annotate(value=F('p'))    
+        else:
+            datas = Temperature.objects.order_by('record_time').filter(record_time__range=(seven_days_ago, now)).annotate(value=F('celsius'))
+        for data in datas:
+            weekday = datetime.weekday(data.record_time)
+            if days[weekday] not in self.labels:
+                self.labels.append(days[weekday])
+    
+        self.max_list = [-100 for i in range(len(self.labels))]
+        self.min_list = [99999999 for i in range(len(self.labels))]
+        for data in datas:
+             weekday = datetime.weekday(data.record_time)
+             idx = self.labels.index(days[weekday])
+             self.set_minmax(idx, data.value)
+      
     def get_providers(self):
         return ['Max','Min']
     
@@ -26,29 +50,13 @@ class LineChartView(BaseLineChartView):
         
     
     def set_minmax(self, index, item):
+        if self.type == 'temp':
+            item = c2f(item)
         if item > self.max_list[index]:
             self.max_list[index] = item
         if item < self.min_list[index]:
             self.min_list[index] = item
-        
-        
-    def last_seven_days(self):
-        now = datetime.now()
-        seven_days_ago = now - timedelta(days=7)
-    
-        datas = Temperature.objects.order_by('record_time').filter(record_time__range=(seven_days_ago, now)).annotate(value=F('celsius'))
-        for data in datas:
-            weekday = datetime.weekday(data.record_time)
-            if days[weekday] not in self.labels:
-                self.labels.append(days[weekday])
-    
-        self.max_list = [-100 for i in range(len(self.labels))]
-        self.min_list = [99999999 for i in range(len(self.labels))]
-        for data in datas:
-             weekday = datetime.weekday(data.record_time)
-             idx = self.labels.index(days[weekday])
-             self.set_minmax(idx, data.value)
-             
+                 
     
 # Create your views here.
 def home(request):
