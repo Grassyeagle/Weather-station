@@ -20,12 +20,13 @@ class LineChartView(BaseLineChartView):
         now = datetime.now()
         seven_days_ago = now - timedelta(days=7)
     
-        if self.type == 'rh':
+        if self.type == 'H':
             datas = H.objects.order_by('record_time').filter(record_time__range=(seven_days_ago, now)).annotate(value=F('rh'))
-        elif self.type == 'celsius':
-            datas = Temperature.objects.order_by('record_time').filter(record_time__range=(seven_days_ago, now)).annotate(value=F('celsius'))    
-        else:
+        elif self.type == 'P':
             datas = Bp.objects.order_by('record_time').filter(record_time__range=(seven_days_ago, now)).annotate(value=F('p'))
+                
+        else:
+            datas = Temperature.objects.order_by('record_time').filter(record_time__range=(seven_days_ago, now)).annotate(value=F('celsius'))
             
         for data in datas:
             weekday = datetime.weekday(data.record_time)
