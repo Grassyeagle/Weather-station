@@ -22,10 +22,11 @@ class LineChartView(BaseLineChartView):
     
         if self.type == 'rh':
             datas = H.objects.order_by('record_time').filter(record_time__range=(seven_days_ago, now)).annotate(value=F('rh'))
-        elif self.type == 'p':
-            datas = Bp.objects.order_by('record_time').filter(record_time__range=(seven_days_ago, now)).annotate(value=F('p'))    
+        elif self.type == 'celsius':
+            datas = Temperature.objects.order_by('record_time').filter(record_time__range=(seven_days_ago, now)).annotate(value=F('celsius'))    
         else:
-            datas = Temperature.objects.order_by('record_time').filter(record_time__range=(seven_days_ago, now)).annotate(value=F('celsius'))
+            datas = Bp.objects.order_by('record_time').filter(record_time__range=(seven_days_ago, now)).annotate(value=F('p'))
+            
         for data in datas:
             weekday = datetime.weekday(data.record_time)
             if days[weekday] not in self.labels:
