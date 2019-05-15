@@ -21,5 +21,5 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('api/', include('api.urls')),
     path('admin/', admin.site.urls),
-    path('chart/<type>', views.LineChartView.as_view(), name='type_chart'),
+    path('chart/<type>', views.LineChartView.as_view(), name='temp_chart'),
     ]
