@@ -20,9 +20,9 @@ class LineChartView(BaseLineChartView):
         now = datetime.now()
         seven_days_ago = now - timedelta(days=7)
     
-        if self.type == 'H':
+        if self.type == 'rh':
             datas = H.objects.order_by('record_time').filter(record_time__range=(seven_days_ago, now)).annotate(value=F('rh'))
-        elif self.type == 'P':
+        elif self.type == 'bp':
             datas = Bp.objects.order_by('record_time').filter(record_time__range=(seven_days_ago, now)).annotate(value=F('p'))
                 
         else:
